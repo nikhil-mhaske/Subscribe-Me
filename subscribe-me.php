@@ -26,7 +26,6 @@ add_action('admin_menu', 'my_add_menu_pages');
 function subscribe_me_callback()
 {
 ?>
-
     <!--Add Input fields on Schedule Content Page-->
     <div class="wrap">
 
@@ -47,19 +46,27 @@ function subscribe_me_callback()
     if (isset($_POST['email'])) {
         $email = sanitize_email($_POST['email']);
         $pattern = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+        
         if (preg_match($pattern, $email)) {
             if (isset($_POST['submit'])) {
+
                 $subs_emails = get_option('subs_emails');
+
                 if (!$subs_emails) {
                     $subs_emails = array();
                 }
-                $subs_emails[] = $email;
-                update_option('subs_emails', $subs_emails);
 
-                // Display a success message
-                echo '<script>alert("You have been subscribed Successfully!");</script>';
+                if (in_array($email, $subs_emails)) {
+                    echo '<script>alert("You are already subscribed!");</script>';
+                } else {
+                    $subs_emails[] = $email;
+                    update_option('subs_emails', $subs_emails);
 
-                send_subscription_mail($email);
+                    // Display a success message
+                    echo '<script>alert("You have been subscribed Successfully!");</script>';
+
+                    send_subscription_mail($email);
+                }
             }
         } else {
             //Display Error Message
@@ -67,6 +74,12 @@ function subscribe_me_callback()
         }
     }
 }
+
+function subscribe_me_add_form()
+{
+    subscribe_me_callback();
+}
+add_action('wp_head', 'subscribe_me_add_form');
 
 function send_subscription_mail($to)
 {
@@ -78,10 +91,4 @@ function send_subscription_mail($to)
     wp_mail($to, 'Subscription Mail', 'You are Subscribed to Daily Updates', $headers);
 };
 
-
-function subscribe_me_add_form()
-{
-    subscribe_me_callback();
-}
-add_action('wp_head', 'subscribe_me_add_form');
 ?>
