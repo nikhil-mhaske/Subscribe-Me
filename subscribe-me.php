@@ -29,7 +29,6 @@ function subscribe_me_callback()
 
     <!--Add Input fields on Schedule Content Page-->
     <div class="wrap">
-        <h1>Subscribe for Daily Updates</h1>
 
 
         <form class="subscribe-me-form" method="post">
@@ -45,12 +44,11 @@ function subscribe_me_callback()
 
 <?php
 
-    if (isset($_POST['submit'])) {
-
+    if (isset($_POST['email'])) {
         $email = sanitize_email($_POST['email']);
         $pattern = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
         if (preg_match($pattern, $email)) {
-            if (isset($_POST['email'])) {
+            if (isset($_POST['submit'])) {
                 $subs_emails = get_option('subs_emails');
                 if (!$subs_emails) {
                     $subs_emails = array();
@@ -59,7 +57,9 @@ function subscribe_me_callback()
                 update_option('subs_emails', $subs_emails);
 
                 // Display a success message
-                echo '<div class="updated"><p>You are subscribed to Daily Updates!</p></div>';
+                echo '<script>alert("You have been subscribed Successfully!");</script>';
+
+                send_subscription_mail($email);
             }
         } else {
             //Display Error Message
@@ -67,6 +67,17 @@ function subscribe_me_callback()
         }
     }
 }
+
+function send_subscription_mail($to)
+{
+    $headers = array(
+        'From: nikhil.mhaske@wisdmlabs.com',
+        'Content-Type: text/html; charset=UTF-8'
+    );
+
+    wp_mail($to, 'Subscription Mail', 'You are Subscribed to Daily Updates', $headers);
+};
+
 
 function subscribe_me_add_form()
 {
