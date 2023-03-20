@@ -27,8 +27,7 @@ function subscribe_me_callback()
 {
 ?>
     <!--Add Input fields on Schedule Content Page-->
-    <div class="wrap">
-
+    <div class="wrap subs-wrap">
 
         <form class="subscribe-me-form" method="post">
             <input type="hidden" name="action" value="subs_form">
@@ -46,7 +45,7 @@ function subscribe_me_callback()
     if (isset($_POST['email'])) {
         $email = sanitize_email($_POST['email']);
         $pattern = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
-        
+
         if (preg_match($pattern, $email)) {
             if (isset($_POST['submit'])) {
 
@@ -83,12 +82,47 @@ add_action('wp_head', 'subscribe_me_add_form');
 
 function send_subscription_mail($to)
 {
+    $subject = 'Congratulations! You are Subscribed';
+    $summary = get_daily_post_summary();
+    $message = 'You are Successfully added to our Daily Update List';
+    $message .= "\n\n";
+    $message .= "Here are our Top latest Posts";
+    $message .= "\n";
+    foreach ($summary as $post_data) {
+        $message .= 'Title: ' . $post_data['title'] . "\n";
+        $message .= 'URL: ' . $post_data['url'] . "\n";
+        $message .= "\n";
+    }
+
     $headers = array(
         'From: nikhil.mhaske@wisdmlabs.com',
         'Content-Type: text/html; charset=UTF-8'
     );
 
-    wp_mail($to, 'Subscription Mail', 'You are Subscribed to Daily Updates', $headers);
+    wp_mail($to, $subject, $message, $headers);
 };
 
+function get_daily_post_summary()
+{
+    $args = array(
+        'date_query' => array(
+            array(
+                'after' => '24 hours ago',
+            ),
+        ),
+    );
+    $query = new WP_Query($args);
+    $posts = $query->posts;
+    $summary = array();
+
+    foreach ($posts as $post) {
+        $post_data = array(
+            'title' => $post->post_title,
+            'url' => get_permalink($post->ID),
+        );
+        array_push($summary, $post_data);
+    }
+
+    return $summary;
+}
 ?>
