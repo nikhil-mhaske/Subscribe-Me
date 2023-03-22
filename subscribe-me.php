@@ -16,12 +16,37 @@ function my_add_menu_pages()
         'Subscribe Me',
         'manage_options',
         'subscribe-me',
-        'subscribe_me_callback',
+        'subscribe_me_cb',
         'dashicons-email',
         10
     );
 }
 add_action('admin_menu', 'my_add_menu_pages');
+
+function subscribe_me_cb()
+{
+?>
+    <div class="wrap">
+        <h1>Subscribe Me Settings</h1>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('my_plugin_settings_group');
+            do_settings_sections('my-plugin-settings');
+            ?>
+            <label>No of Posts : </label>
+            <input type="text" name="no_of_posts" value="<?php echo esc_attr(get_option('no_of_posts')) ?>">
+            <?php submit_button('Save Changes'); ?>
+        </form>
+    </div>
+<?php
+}
+
+function reg_settings()
+{
+    register_setting('my_plugin_settings_group', 'no_of_posts');
+    add_settings_section('subs_settings', 'Subscription Settings', '', 'my-plugin-settings');
+}
+add_action('admin_init', 'reg_settings');
 
 function subscribe_me_callback()
 {
@@ -104,25 +129,33 @@ function send_subscription_mail($to)
 
 function get_daily_post_summary()
 {
+    /*For sending posts in last 24 hours*/
+    // $args = array(
+    //     'date_query' => array(
+    //         array(
+    //             'after' => '24 hours ago',
+    //         ),
+    //     ),
+    // );
+
+    /*For sending latest n posts */
     $args = array(
-        'date_query' => array(
-            array(
-                'after' => '24 hours ago',
-            ),
-        ),
+        'post_type' => 'post',
+        'posts_per_page' => 1,
+        'post_status' => 'publish'
     );
+
     $query = new WP_Query($args);
     $posts = $query->posts;
-    $summary = array();
+    $mail_list = array();
 
     foreach ($posts as $post) {
         $post_data = array(
             'title' => $post->post_title,
             'url' => get_permalink($post->ID),
         );
-        array_push($summary, $post_data);
+        array_push($mail_list, $post_data);
     }
-
-    return $summary;
+    return $mail_list;
 }
 ?>
