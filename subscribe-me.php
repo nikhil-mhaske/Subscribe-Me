@@ -20,7 +20,16 @@ function my_add_menu_pages()
         'dashicons-email',
         10
     );
+    add_submenu_page(
+        'subscribe-me',
+        'Subscribers List',
+        'Subscribers',
+        'manage_options',
+        'subscribers',
+        'subscribers_cb',
+    );
 }
+
 add_action('admin_menu', 'my_add_menu_pages');
 
 function subscribe_me_cb()
@@ -54,6 +63,16 @@ function no_of_posts_cb()
 <?php
 }
 
+
+//Submenu Subscribers List
+function subscribers_cb() {
+    $subscribers_list= get_option('subs_emails');
+    echo '<table><th>Subscribers Emails</th>';
+
+    foreach($subscribers_list as $mail) {
+        echo '<tr><td>'. $mail . '</tr></td>';
+    }
+}
 
 
 function subscribe_me_callback()
