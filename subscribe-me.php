@@ -27,14 +27,12 @@ function subscribe_me_cb()
 {
 ?>
     <div class="wrap">
-        <h1>Subscribe Me Settings</h1>
+        <h2>Subscribe Me!</h2>
         <form method="post" action="options.php">
             <?php
             settings_fields('my_plugin_settings_group');
-            do_settings_sections('my-plugin-settings');
+            do_settings_sections('subscribe-me-settings');
             ?>
-            <label>No of Posts : </label>
-            <input type="text" name="no_of_posts" value="<?php echo esc_attr(get_option('no_of_posts')) ?>">
             <?php submit_button('Save Changes'); ?>
         </form>
     </div>
@@ -44,9 +42,19 @@ function subscribe_me_cb()
 function reg_settings()
 {
     register_setting('my_plugin_settings_group', 'no_of_posts');
-    add_settings_section('subs_settings', 'Subscription Settings', '', 'my-plugin-settings');
+    add_settings_section('subs_settings', 'Subscription Mail Settings', '', 'subscribe-me-settings');
+    add_settings_field('no_of_posts', 'No of Posts', 'no_of_posts_cb', 'subscribe-me-settings', 'subs_settings');
 }
 add_action('admin_init', 'reg_settings');
+
+function no_of_posts_cb()
+{
+?>
+    <input type="text" name="no_of_posts" value="<?php echo esc_attr(get_option('no_of_posts')) ?>">
+<?php
+}
+
+
 
 function subscribe_me_callback()
 {
@@ -141,7 +149,7 @@ function get_daily_post_summary()
     /*For sending latest n posts */
     $args = array(
         'post_type' => 'post',
-        'posts_per_page' => 1,
+        'posts_per_page' => get_option('no_of_posts'),
         'post_status' => 'publish'
     );
 
