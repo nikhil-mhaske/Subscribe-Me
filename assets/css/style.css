@@ -1,0 +1,29 @@
+/*Table CSS*/
+#sm-table {
+    border-collapse: collapse;
+    text-align: center;
+   }
+  
+   #sm-table th{
+    background-color: #222222;
+    color: white;
+   }
+  
+   #sm-table th,#sm-table td {
+    padding: 8px;
+    font-size: 18px;
+   }
+  
+   #sm-table tr {
+    border-bottom: 1px solid #222;
+   }
+  
+
+#send {
+    background-color: blue;
+    color: white;
+    padding: 10px;
+    border: none;
+    font-family: 'helvetica';
+    text-transform: uppercase;
+}
