@@ -8,6 +8,11 @@
 * Text Domain: subscribe-me
 */
 
+
+//enqueue CSS
+require plugin_dir_path(__FILE__) . 'includes/scripts.php';
+
+
 //For Trial at admin site
 function my_add_menu_pages()
 {
@@ -65,19 +70,57 @@ function no_of_posts_cb()
 
 
 //Submenu Subscribers List
-function subscribers_cb() {
-    $subscribers_list= get_option('subs_emails');
-    echo '<table><th>Subscribers Emails</th>';
+function subscribers_cb()
+{
+    $subscribers_list = get_option('subs_emails');
+    echo '<table id="sm-table"><th>Subscribers Emails</th>';
 
-    foreach($subscribers_list as $mail) {
-        echo '<tr><td>'. $mail . '</tr></td>';
+    foreach ($subscribers_list as $mail) {
+        echo '<tr><td>' . $mail . '</tr></td>';
+    }
+    echo '</table>';
+?>
+
+    <form method="post">
+        <input type="submit" name="send" id="send" value="Send Mail" />
+    </form>
+
+    <?php
+
+    if (isset($_POST['send'])) {
+        send_mail_to_all();
+    }
+}
+
+function send_mail_to_all()
+{
+    $subscribers_list = get_option('subs_emails');
+
+    foreach ($subscribers_list as $mail) {
+        $subject = 'Hello! We have something special for you';
+        $summary = get_daily_post_summary();
+
+        $message = "Our Latest articles (May Be Helpful to You)";
+        $message .= "\n";
+        foreach ($summary as $post_data) {
+            $message .= 'Title: ' . $post_data['title'] . "\n";
+            $message .= 'URL: ' . $post_data['url'] . "\n";
+            $message .= "\n";
+        }
+
+        $headers = array(
+            'From: nikhil.mhaske@wisdmlabs.com',
+            'Content-Type: text/html; charset=UTF-8'
+        );
+
+        wp_mail($mail, $subject, $message, $headers);
     }
 }
 
 
 function subscribe_me_callback()
 {
-?>
+    ?>
     <!--Add Input fields on Schedule Content Page-->
     <div class="wrap subs-wrap">
 
