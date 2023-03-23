@@ -82,7 +82,7 @@ function subscribers_cb()
 ?>
 
     <form method="post">
-        <input type="submit" name="send" id="send" value="Send Mail" />
+        <input type="submit" name="send" id="send" value="Send Mail" class="button button-primary"/>
     </form>
 
     <?php
