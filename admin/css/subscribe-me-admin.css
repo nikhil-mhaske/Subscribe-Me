@@ -1,4 +1,9 @@
-/*Table CSS*/
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+ 
+ /*Table CSS*/
 #sm-table {
     border-collapse: collapse;
     text-align: center;
@@ -18,4 +23,3 @@
     border-bottom: 1px solid #222;
    }
   
-
