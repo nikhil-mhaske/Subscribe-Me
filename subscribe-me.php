@@ -82,30 +82,6 @@ function run_subscribe_me() {
 run_subscribe_me();
 
 
-//For Trial at admin site
-function my_add_menu_pages()
-{
-    add_menu_page(
-        'Subscribe Me',
-        'Subscribe Me',
-        'manage_options',
-        'subscribe-me',
-        'subscribe_me_cb',
-        'dashicons-email',
-        10
-    );
-    add_submenu_page(
-        'subscribe-me',
-        'Subscribers List',
-        'Subscribers',
-        'manage_options',
-        'subscribers',
-        'subscribers_cb',
-    );
-}
-
-add_action('admin_menu', 'my_add_menu_pages');
-
 function subscribe_me_cb()
 {
 ?>

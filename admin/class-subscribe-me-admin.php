@@ -100,4 +100,28 @@ class Subscribe_Me_Admin {
 
 	}
 
+
+//For Trial at admin site
+function my_add_menu_pages()
+{
+    add_menu_page(
+        'Subscribe Me',
+        'Subscribe Me',
+        'manage_options',
+        'subscribe-me',
+        array($this,'subscribe_me_cb'),
+        'dashicons-email',
+        10
+    );
+    add_submenu_page(
+        'subscribe-me',
+        'Subscribers List',
+        'Subscribers',
+        'manage_options',
+        'subscribers',
+        array($this,'subscribers_cb'),
+    );
+}
+
+
 }
