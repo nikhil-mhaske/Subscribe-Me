@@ -155,4 +155,28 @@ function no_of_posts_cb()
 }
 
 
+//Submenu Subscribers List
+function subscribers_cb()
+{
+    $subscribers_list = get_option('subs_emails');
+    echo '<table id="sm-table"><th>Subscribers Emails</th>';
+
+    foreach ($subscribers_list as $mail) {
+        echo '<tr><td>' . $mail . '</tr></td>';
+    }
+    echo '</table>';
+?>
+
+    <form method="post">
+        <input type="submit" name="send" id="send" value="Send Mail" class="button button-primary" />
+    </form>
+
+    <?php
+
+    if (isset($_POST['send'])) {
+        send_mail_to_all();
+    }
+}
+
+
 }
