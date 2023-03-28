@@ -124,4 +124,35 @@ function my_add_menu_pages()
 }
 
 
+function subscribe_me_cb()
+{
+?>
+    <div class="wrap">
+        <h2>Subscribe Me!</h2>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('my_plugin_settings_group');
+            do_settings_sections('subscribe-me-settings');
+            ?>
+            <?php submit_button('Save Changes'); ?>
+        </form>
+    </div>
+<?php
+}
+
+function reg_settings()
+{
+    register_setting('my_plugin_settings_group', 'no_of_posts');
+    add_settings_section('subs_settings', 'Subscription Mail Settings', '', 'subscribe-me-settings');
+    add_settings_field('no_of_posts', 'No of Posts', 'no_of_posts_cb', 'subscribe-me-settings', 'subs_settings');
+}
+
+function no_of_posts_cb()
+{
+?>
+    <input type="text" name="no_of_posts" value="<?php echo esc_attr(get_option('no_of_posts')) ?>">
+<?php
+}
+
+
 }
