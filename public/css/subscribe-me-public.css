@@ -2,3 +2,18 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+
+
+ /*For Widget form*/
+.widget-form {
+    margin-bottom: 5px;
+}
+ .subscribe-me-form, .widget-form {
+    text-align: center;
+ }
+.subscribe-me-form input[type="email"],
+.subscribe-me-form input[type="submit"] {
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+}

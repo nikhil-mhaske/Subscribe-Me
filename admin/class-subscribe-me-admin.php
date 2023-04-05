@@ -156,7 +156,7 @@ class Subscribe_Me_Admin
 	}
 
 
-	//Submenu Subscribers List
+	//Submenu Subscribers List & Send Mail to all
 	function subscribers_cb()
 	{
 		$subscribers_list = get_option('subs_emails');
@@ -169,7 +169,7 @@ class Subscribe_Me_Admin
 	?>
 
 		<form method="post">
-			<input type="submit" name="send" id="send" value="Send Mail" class="button button-primary" />
+			<input type="submit" name="send" id="send" value="Send Mail to All" class="button button-primary" />
 		</form>
 
 		<?php
@@ -180,7 +180,7 @@ class Subscribe_Me_Admin
 	}
 
 
-
+	//sending mail to all
 	function send_mail_to_all()
 	{
 		$subscribers_list = get_option('subs_emails');
@@ -206,18 +206,17 @@ class Subscribe_Me_Admin
 		}
 	}
 
-
+	//subscribe me section
 	public function subscribe_me_callback()
 	{
 		?>
 		<!--Add Input fields on Schedule Content Page-->
-		<div class="wrap subs-wrap">
-
+		<div class="widget-form">
+			<h5>Subscribe for Updates!</h5>
 			<form class="subscribe-me-form" method="post">
 				<input type="hidden" name="action" value="subs_form">
 
-				<label for="email">Email:</label>
-				<input type="email" name="email" id="email" /><br />
+				<input type="email" name="email" id="email" placeholder="Email" /><br />
 
 				<input type="submit" name="submit" value="Subscribe" />
 
@@ -228,7 +227,7 @@ class Subscribe_Me_Admin
 
 		if (isset($_POST['email'])) {
 			$email = sanitize_email($_POST['email']);
-			$pattern = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+			$pattern = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'; //regex validation 
 
 			if (preg_match($pattern, $email)) {
 				if (isset($_POST['submit'])) {
@@ -258,7 +257,7 @@ class Subscribe_Me_Admin
 		}
 	}
 
-
+	//Sending mail
 	function send_subscription_mail($to)
 	{
 		$subject = 'Congratulations! You are Subscribed';
@@ -281,6 +280,7 @@ class Subscribe_Me_Admin
 		wp_mail($to, $subject, $message, $headers);
 	}
 
+	//Getting Latest N Posts
 	function get_daily_post_summary()
 	{
 		/*For sending posts in last 24 hours*/
@@ -313,9 +313,7 @@ class Subscribe_Me_Admin
 		return $mail_list;
 	}
 
-
-
-
+	//Register Widget
 	function register_subscription_widget()
 	{
 		register_widget('Subscription_Widget');
